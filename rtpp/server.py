@@ -1,6 +1,9 @@
 import argparse
 import asyncio
 
+HOST = '127.0.0.1'
+PORT = 9999
+
 loop = None
 
 
@@ -23,7 +26,7 @@ class TCPProtocol(asyncio.Protocol):
     def start_server(cls):
         global loop
 
-        listen = loop.create_server(cls, '127.0.0.1', 9999)
+        listen = loop.create_server(cls, HOST, PORT)
         server = loop.run_until_complete(listen)
         print('Starting RTPP server over TCP on {}'.format(server.sockets[0].getsockname()))
 
@@ -44,7 +47,7 @@ class UDPProtocol:
     def start_server(cls):
         global loop
 
-        listen = loop.create_datagram_endpoint(cls, local_addr=('127.0.0.1', 9999))
+        listen = loop.create_datagram_endpoint(cls, local_addr=(HOST, PORT))
         server, _ = loop.run_until_complete(listen)
         print('Starting RTPP server over UDP on {}'.format(server._extra['sockname']))
 
